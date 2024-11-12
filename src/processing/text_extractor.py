@@ -10,7 +10,6 @@ from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-# Function to take a full-page screenshot using Selenium and extract text
 def capture_full_page_screenshot_with_selenium():
     edge_options = Options()
     edge_options.use_chromium = True
@@ -28,42 +27,44 @@ def capture_full_page_screenshot_with_selenium():
     time.sleep(2)
 
     screenshot_data = driver.get_screenshot_as_png()
-    save_image(screenshot_data, "utils/full_page_screenshot.png")  # Save using helper function
+    save_image(screenshot_data, "utils/full_page_screenshot.png")
     driver.quit()
 
-    text = extract_text_from_image(screenshot_data)
-    return text
+    return extract_text_from_image(screenshot_data)
 
-# Async function to fetch content and take screenshot using AsyncWebCrawler
+# Async function to fetch content
 async def fetch_and_take_screenshot():
     async with AsyncWebCrawler(verbose=True) as crawler:
         result = await crawler.arun(url=URL, screenshot=True)
-        scrapped = result.success
-
-        if scrapped:
+        if result.success:
             soup = BeautifulSoup(result.html, "html.parser")
             text_content_crawler = soup.get_text()
 
             screenshot_data = base64.b64decode(result.screenshot)
-            save_image(screenshot_data, "utils/screenshot.png")  # Save using helper function
+            save_image(screenshot_data, "utils/screenshot.png")
 
             extracted_text = extract_text_from_image(screenshot_data)
             char_count = len(extracted_text)
-            print("Extracted Text Character Count:", char_count)
-
-            if char_count < 1700:
-                print("Text is less than 1700 characters; falling back to Selenium for full-page screenshot.")
-                text_selenium = capture_full_page_screenshot_with_selenium()
-                char_count_selenium = len(text_selenium)
-                print("Extracted Text Character Count:", char_count_selenium)
-
-                if char_count_selenium < 1700:
-                    print("Text is less than 1700 characters; text_content_crawler")
-                    print(text_content_crawler)
+            
+            if char_count >= 1700:
+                print("Using text extracted from AsyncWebCrawler.")
+                return extracted_text
+            elif len(text_content_crawler) >= 1700:
+                print("Using text content from web crawler (HTML text).")
+                return text_content_crawler
+            else:
+                print("Fallback to Selenium")
+                return capture_full_page_screenshot_with_selenium()
         else:
-            print("Scraping failed. Falling back to Selenium for full-page screenshot.")
-            text_selenium = capture_full_page_screenshot_with_selenium()
+            print("AsyncWebCrawler scraping failed. Using Selenium for fallback.")
+            return capture_full_page_screenshot_with_selenium()
 
-# Main function to initiate the scraping process
+# Wrapper to process the final extracted text
 async def process_text_extraction():
-    await fetch_and_take_screenshot()
+    final_text_model = await fetch_and_take_screenshot()
+    # print(f'Final text for model:\n{final_text_model}')
+    return final_text_model
+
+# Execute the process
+if __name__ == "__main__":
+    asyncio.run(process_text_extraction())

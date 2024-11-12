@@ -1,1 +1,2 @@
 from .text_extractor import process_text_extraction
+from src.processing import text_extractor
