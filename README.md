@@ -37,7 +37,7 @@ cd Cover-Letter-Builder
     ```
 
 3. **Download and configure the LLaMA model**:
-   - Follow [Ollama's guidelines](docs/ollama.md) to set up the LLaMA model for language processing.
+   - You may follow here to setup [Ollama](docs/ollama.md) and LLaMA model for language processing.
 
 4. **Web Driver Setup for Selenium**:
    - Selenium requires a web driver to control browsers.
