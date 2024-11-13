@@ -1,0 +1,10 @@
+asyncio
+beautifulsoup4
+crawl4ai
+docx
+selenium
+pillow
+tesseract
+pytest-asyncio
+ollama
+bs4
