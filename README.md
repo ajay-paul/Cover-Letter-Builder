@@ -17,7 +17,7 @@ To use this project, you need Python 3.10+. Follow these steps to set up the env
 ### Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/Cover-Letter-Builder.git
+git clone https://github.com/ajay-paul/Cover-Letter-Builder.git
 cd Cover-Letter-Builder
 ```
 
