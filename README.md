@@ -55,6 +55,8 @@ cd Cover-Letter-Builder
    ### Using Firefox WebDriver
    1. Download [GeckoDriver](https://github.com/mozilla/geckodriver/releases).
    2. Extract and add it to your PATH.
+> ⚠️ **Note:**  
+> If you're using a web driver other than Edge, make sure to import the appropriate driver.
 
 5. **Tesseract OCR**:
    - For Tesseract, you may need to install it separately.
